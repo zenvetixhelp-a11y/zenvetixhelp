@@ -1,96 +1,129 @@
 import { Link } from 'react-router-dom';
-import SEOHead from '../components/SEOHead';
+import { Mail, ExternalLink, Shield, FileText } from 'lucide-react';
 
-const sections = [
-  {
-    title: '1. Information We Collect',
-    body: 'When you submit a support request through our Contact page, we collect your name, email address, optional Amazon order number, and the content of your message. We do not collect payment information, browsing history beyond standard web server logs, or any information from children under 13.',
-  },
-  {
-    title: '2. How We Use Your Information',
-    body: 'We use the information you provide solely to respond to your support request, diagnose product issues, and improve our products and support materials. We do not use your information for marketing without explicit consent.',
-  },
-  {
-    title: '3. Data Storage',
-    body: 'Support messages are stored securely using Supabase, a cloud database provider with industry-standard encryption at rest and in transit (TLS 1.2+). Data is stored in the United States.',
-  },
-  {
-    title: '4. Data Sharing',
-    body: 'We do not sell, rent, or trade your personal information to third parties. We may share information with service providers necessary to operate our website (e.g., hosting, database). These providers are contractually bound to protect your data.',
-  },
-  {
-    title: '5. Data Retention',
-    body: 'Support messages are retained for up to 2 years to provide consistent service history. You may request deletion of your data at any time by emailing support@zenvetix.com.',
-  },
-  {
-    title: '6. Cookies',
-    body: 'This website uses only essential cookies required for the site to function. We do not use tracking cookies, advertising cookies, or third-party analytics cookies.',
-  },
-  {
-    title: '7. Children\'s Privacy',
-    body: 'Our website is intended for parents and guardians. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected such information, please contact us immediately.',
-  },
-  {
-    title: '8. Your Rights',
-    body: 'You have the right to access, correct, or delete personal information we hold about you. To exercise these rights, email support@zenvetix.com. We will respond within 30 days.',
-  },
-  {
-    title: '9. Security',
-    body: 'We implement reasonable administrative, technical, and physical safeguards to protect your information. However, no transmission over the internet is 100% secure, and we cannot guarantee absolute security.',
-  },
-  {
-    title: '10. Changes to This Policy',
-    body: 'We may update this Privacy Policy from time to time. The "Last Updated" date at the top of this page will reflect any changes. Continued use of the site after changes constitutes acceptance.',
-  },
-  {
-    title: '11. Contact Us',
-    body: 'If you have questions about this Privacy Policy, email us at support@zenvetix.com or use the Contact page.',
-  },
+const quickLinks = [
+  { label: 'Home', to: '/' },
+  { label: 'Setup Guide', to: '/setup' },
+  { label: 'Support Center', to: '/support' },
+  { label: 'Downloads', to: '/downloads' },
+  { label: 'Contact Support', to: '/contact' },
 ];
 
-export default function PrivacyPolicyPage() {
-  return (
-    <>
-      <SEOHead
-        title="Privacy Policy — ZENVETIX"
-        description="ZENVETIX Privacy Policy. Learn how we collect, use, and protect your personal information."
-        canonical="/privacy"
-        noIndex={false}
-      />
-      <main id="main-content" className="pt-20">
-        <section className="bg-gradient-to-b from-blue-50 to-white py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-            <span className="badge-blue mb-4 inline-flex">Legal</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Privacy Policy</h1>
-            <p className="text-gray-500 text-sm">Last Updated: June 1, 2026</p>
-          </div>
-        </section>
+const legalLinks = [
+  { label: 'Privacy Policy', to: '/privacy', icon: Shield },
+  { label: 'Terms of Service', to: '/terms', icon: FileText },
+];
 
-        <section className="py-12 md:py-16 bg-white">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-blue-50 rounded-2xl p-5 mb-10">
-              <p className="text-gray-700 text-sm leading-relaxed">
-                ZENVETIX ("we," "our," or "us") is committed to protecting your privacy. This policy describes what information we collect when you use zenvetix.com ("the Site") and how we use it.
+export default function Footer() {
+  return (
+    <footer className="bg-gray-900 text-gray-300" role="contentinfo">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+          {/* Brand */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-9 h-9 bg-blue-500 rounded-xl flex items-center justify-center">
+                <span className="text-white font-bold text-lg leading-none font-heading">Z</span>
+              </div>
+              <span className="text-xl font-bold text-white font-heading tracking-tight">ZENVETIX</span>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed max-w-xs mb-5">
+              Helping Families Build Confidence, One Dry Night at a Time. Trusted by parents across the United States.
+            </p>
+            <a
+              href="mailto:support@zenvetix.com"
+              className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
+            >
+              <Mail size={15} aria-hidden="true" />
+              support@zenvetix.com
+            </a>
+          </div>
+
+          {/* Quick links */}
+          <div>
+            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5">Quick Links</h3>
+            <ul className="space-y-3">
+              {quickLinks.map((link) => (
+                <li key={link.to}>
+                  <Link
+                    to={link.to}
+                    className="text-gray-400 hover:text-white text-sm transition-colors duration-150"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5">Support</h3>
+            <div className="space-y-4 text-sm">
+              <div className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-green-400 mt-1.5 flex-shrink-0" aria-hidden="true"></div>
+                <div>
+                  <p className="text-gray-300 font-medium">Response Time</p>
+                  <p className="text-gray-500">Within 24–48 hours</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" aria-hidden="true"></div>
+                <div>
+                  <p className="text-gray-300 font-medium">Email Support</p>
+                  <p className="text-gray-500">support@zenvetix.com</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" aria-hidden="true"></div>
+                <div>
+                  <p className="text-gray-300 font-medium">Amazon Purchase</p>
+                  <a
+                    href="https://www.amazon.com/dp/B0CXYZEXAMPLE"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 transition-colors inline-flex items-center gap-1"
+                  >
+                    View on Amazon <ExternalLink size={11} aria-hidden="true" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-5">Legal</h3>
+            <ul className="space-y-3">
+              {legalLinks.map(({ label, to, icon: Icon }) => (
+                <li key={to}>
+                  <Link
+                    to={to}
+                    className="text-gray-400 hover:text-white text-sm transition-colors duration-150 inline-flex items-center gap-2"
+                  >
+                    <Icon size={13} aria-hidden="true" />
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 p-3 bg-gray-800 rounded-xl">
+              <p className="text-gray-500 text-xs leading-relaxed">
+                ZENVETIX is not a medical device and is not intended to diagnose, treat, or cure any medical condition.
               </p>
             </div>
-
-            <div className="space-y-8">
-              {sections.map(({ title, body }) => (
-                <div key={title}>
-                  <h2 className="text-lg font-bold text-gray-900 mb-3">{title}</h2>
-                  <p className="text-gray-600 text-sm leading-relaxed">{body}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-12 pt-8 border-t border-gray-100 flex flex-wrap gap-4 text-sm text-gray-500">
-              <Link to="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>
-              <Link to="/contact" className="text-blue-600 hover:underline">Contact Us</Link>
-              <Link to="/" className="text-blue-600 hover:underline">Home</Link>
-            </div>
           </div>
-        </section>
-      </main>
-    </>
+        </div>
+
+        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-gray-500 text-sm">
+            &copy; 2026 ZENVETIX. All Rights Reserved.
+          </p>
+          <p className="text-gray-600 text-xs">
+            Wireless Bedwetting Alarm &mdash; Trusted by Families Across the United States
+          </p>
+        </div>
+      </div>
+    </footer>
   );
 }

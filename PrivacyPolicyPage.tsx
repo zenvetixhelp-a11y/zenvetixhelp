@@ -1,131 +1,126 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, QrCode } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { FileText, Download, BookOpen, Award, ArrowRight, CheckCircle } from 'lucide-react';
+import SEOHead from '../components/SEOHead';
+import { useScrollReveal, useStaggerReveal } from '../hooks/useScrollReveal';
+import { useRef } from 'react';
 
-const navLinks = [
-  { label: 'Home', to: '/' },
-  { label: 'Setup Guide', to: '/setup' },
-  { label: 'Support Center', to: '/support' },
-  { label: 'Downloads', to: '/downloads' },
-  { label: 'Contact', to: '/contact' },
+const downloads = [
+  {
+    icon: FileText,
+    title: 'User Manual (English)',
+    desc: 'Complete instructions including setup, maintenance, troubleshooting, and warranty.',
+    size: '2.4 MB · PDF',
+    href: '/downloads/zenvetix-manual-en.pdf',
+  },
+  {
+    icon: BookOpen,
+    title: 'Quick Start Card',
+    desc: 'One-page printable guide — perfect to keep near the alarm.',
+    size: '380 KB · PDF',
+    href: '/downloads/zenvetix-quickstart.pdf',
+  },
+  {
+    icon: Award,
+    title: 'Warranty Registration',
+    desc: 'Register your product to activate your 90-day warranty and 30-day guarantee.',
+    size: '220 KB · PDF',
+    href: '/downloads/zenvetix-warranty.pdf',
+  },
 ];
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
-  const isQR = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('ref');
+const tips = [
+  'Use the alarm every single night — consistency is the key to success.',
+  'Set a bedtime routine: attach the sensor at the same time each night.',
+  'Limit fluids for 1–2 hours before bed to reduce wetting frequency.',
+  'When the alarm sounds, guide your child to the bathroom themselves.',
+  'Celebrate every dry night — positive reinforcement accelerates results.',
+  'Most children show improvement within 4–8 weeks of consistent use.',
+];
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 16);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    setIsOpen(false);
-  }, [location]);
-
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [isOpen]);
+export default function DownloadsPage() {
+  const downloadsRef = useRef<HTMLDivElement>(null);
+  const tipsReveal = useScrollReveal();
+  const ctaReveal = useScrollReveal();
+  useStaggerReveal(downloadsRef as React.RefObject<HTMLElement>, '.dl-card', 100);
 
   return (
     <>
-      <a href="#main-content" className="skip-link">Skip to main content</a>
-      {isQR && (
-        <div className="fixed top-0 left-0 right-0 z-40 bg-blue-600 text-white text-center text-xs font-medium py-2 px-4 flex items-center justify-center gap-2">
-          <QrCode size={13} />
-          <span>Scanned our QR code? <Link to="/setup" className="underline font-semibold">Start the Setup Guide</Link> to get started.</span>
-        </div>
-      )}
-      <header
-        role="banner"
-        className={`fixed left-0 right-0 z-50 transition-all duration-300 ${isQR ? 'top-8' : 'top-0'} ${
-          scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white/80 backdrop-blur-sm'
-        }`}
-      >
-        <nav
-          role="navigation"
-          aria-label="Main navigation"
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-        >
-          <div className="flex items-center justify-between h-16 md:h-18">
-            <Link to="/" className="flex items-center gap-2.5 group flex-shrink-0" aria-label="ZENVETIX home">
-              <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center shadow-sm group-hover:bg-blue-700 transition-colors">
-                <span className="text-white font-bold text-lg leading-none font-heading">Z</span>
-              </div>
-              <span className="text-xl font-bold text-gray-900 tracking-tight font-heading">ZENVETIX</span>
-            </Link>
+      <SEOHead
+        title="Downloads — ZENVETIX Bedwetting Alarm"
+        description="Download the ZENVETIX user manual, quick start guide, and warranty registration form. All documents available as free PDF downloads."
+        canonical="/downloads"
+      />
+      <main id="main-content" className="pt-20">
+        {/* Hero */}
+        <section className="bg-gradient-to-b from-blue-50 to-white py-16 md:py-24">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+            <span className="badge-blue mb-5 inline-flex">Free Downloads</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5">Product Documents</h1>
+            <p className="text-lg text-gray-500">Download the user manual, quick start guide, and warranty form for your ZENVETIX alarm.</p>
+          </div>
+        </section>
 
-            <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  aria-current={location.pathname === link.to ? 'page' : undefined}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    location.pathname === link.to
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
-                >
-                  {link.label}
-                </Link>
+        {/* Download cards */}
+        <section className="py-16 md:py-20 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div ref={downloadsRef} className="grid sm:grid-cols-3 gap-6">
+              {downloads.map(({ icon: Icon, title, desc, size, href }) => (
+                <div key={title} className="dl-card reveal card p-6 flex flex-col">
+                  <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mb-4">
+                    <Icon size={22} className="text-blue-600" aria-hidden="true" />
+                  </div>
+                  <h2 className="font-bold text-gray-900 mb-2">{title}</h2>
+                  <p className="text-gray-500 text-sm leading-relaxed mb-4 flex-1">{desc}</p>
+                  <p className="text-gray-400 text-xs mb-4">{size}</p>
+                  <a
+                    href={href}
+                    download
+                    className="btn-primary justify-center text-sm py-2.5"
+                    aria-label={`Download ${title}`}
+                  >
+                    <Download size={16} aria-hidden="true" /> Download
+                  </a>
+                </div>
               ))}
             </div>
 
-            <div className="hidden md:flex items-center gap-3">
-              <Link to="/contact" className="btn-primary text-sm py-2.5 px-5">
-                Get Support
-              </Link>
-            </div>
-
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-              aria-label={isOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={isOpen}
-              aria-controls="mobile-nav"
-            >
-              {isOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
+            <p className="text-center text-gray-400 text-xs mt-8">
+              Documents open in a new tab. Requires a PDF reader such as Adobe Acrobat or your browser's built-in viewer.
+            </p>
           </div>
-        </nav>
+        </section>
 
-        <div
-          id="mobile-nav"
-          role="dialog"
-          aria-label="Mobile navigation"
-          aria-modal="true"
-          className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${
-            isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
-          } bg-white border-t border-gray-100`}
-        >
-          <div className="px-4 py-4 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                aria-current={location.pathname === link.to ? 'page' : undefined}
-                className={`flex items-center px-4 py-3 rounded-xl text-base font-medium transition-all duration-150 min-h-[48px] ${
-                  location.pathname === link.to
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <div className="pt-3 pb-2">
-              <Link to="/contact" className="btn-primary w-full justify-center text-base">
-                Get Support
-              </Link>
+        {/* Tips */}
+        <section className="py-16 bg-gray-50">
+          <div ref={tipsReveal as React.RefObject<HTMLDivElement>} className="reveal max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <span className="badge-blue mb-4 inline-flex">Pro Tips</span>
+              <h2 className="section-heading mb-4">Get the Best Results</h2>
+              <p className="section-subheading">Follow these expert tips to accelerate your child's progress.</p>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {tips.map((tip, i) => (
+                <div key={i} className="flex items-start gap-3 bg-white rounded-xl p-4 border border-gray-100">
+                  <CheckCircle size={16} className="text-green-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                  <p className="text-gray-700 text-sm leading-relaxed">{tip}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </header>
+        </section>
+
+        {/* CTA */}
+        <section className="py-16 bg-white">
+          <div ref={ctaReveal as React.RefObject<HTMLDivElement>} className="reveal max-w-3xl mx-auto px-4 sm:px-6 text-center">
+            <h2 className="section-heading mb-4">Need More Help?</h2>
+            <p className="section-subheading mb-8">Our support team responds within 24–48 hours.</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link to="/contact" className="btn-primary">Contact Support <ArrowRight size={18} aria-hidden="true" /></Link>
+              <Link to="/support" className="btn-secondary">Browse FAQ</Link>
+            </div>
+          </div>
+        </section>
+      </main>
     </>
   );
 }

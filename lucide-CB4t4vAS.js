@@ -1,1 +1,82 @@
-import{r as m,j as e}from"./react-vendor-Dzuxdzeo.js";import{u as r,a as x,S as h}from"./index-COMvR7lO.js";import{D as u,C as p,A as g,F as b,B as f,c as w}from"./lucide-CB4t4vAS.js";import{L as n}from"./router-Dq6QbH-D.js";const j=[{icon:b,title:"User Manual (English)",desc:"Complete instructions including setup, maintenance, troubleshooting, and warranty.",size:"2.4 MB · PDF",href:"/downloads/zenvetix-manual-en.pdf"},{icon:f,title:"Quick Start Card",desc:"One-page printable guide — perfect to keep near the alarm.",size:"380 KB · PDF",href:"/downloads/zenvetix-quickstart.pdf"},{icon:w,title:"Warranty Registration",desc:"Register your product to activate your 90-day warranty and 30-day guarantee.",size:"220 KB · PDF",href:"/downloads/zenvetix-warranty.pdf"}],y=["Use the alarm every single night — consistency is the key to success.","Set a bedtime routine: attach the sensor at the same time each night.","Limit fluids for 1–2 hours before bed to reduce wetting frequency.","When the alarm sounds, guide your child to the bathroom themselves.","Celebrate every dry night — positive reinforcement accelerates results.","Most children show improvement within 4–8 weeks of consistent use."];function k(){const t=m.useRef(null),i=r(),l=r();return x(t,".dl-card",100),e.jsxs(e.Fragment,{children:[e.jsx(h,{title:"Downloads — ZENVETIX Bedwetting Alarm",description:"Download the ZENVETIX user manual, quick start guide, and warranty registration form. All documents available as free PDF downloads.",canonical:"/downloads"}),e.jsxs("main",{id:"main-content",className:"pt-20",children:[e.jsx("section",{className:"bg-gradient-to-b from-blue-50 to-white py-16 md:py-24",children:e.jsxs("div",{className:"max-w-3xl mx-auto px-4 sm:px-6 text-center",children:[e.jsx("span",{className:"badge-blue mb-5 inline-flex",children:"Free Downloads"}),e.jsx("h1",{className:"text-4xl md:text-5xl font-bold text-gray-900 mb-5",children:"Product Documents"}),e.jsx("p",{className:"text-lg text-gray-500",children:"Download the user manual, quick start guide, and warranty form for your ZENVETIX alarm."})]})}),e.jsx("section",{className:"py-16 md:py-20 bg-white",children:e.jsxs("div",{className:"max-w-4xl mx-auto px-4 sm:px-6 lg:px-8",children:[e.jsx("div",{ref:t,className:"grid sm:grid-cols-3 gap-6",children:j.map(({icon:a,title:s,desc:o,size:c,href:d})=>e.jsxs("div",{className:"dl-card reveal card p-6 flex flex-col",children:[e.jsx("div",{className:"w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mb-4",children:e.jsx(a,{size:22,className:"text-blue-600","aria-hidden":"true"})}),e.jsx("h2",{className:"font-bold text-gray-900 mb-2",children:s}),e.jsx("p",{className:"text-gray-500 text-sm leading-relaxed mb-4 flex-1",children:o}),e.jsx("p",{className:"text-gray-400 text-xs mb-4",children:c}),e.jsxs("a",{href:d,download:!0,className:"btn-primary justify-center text-sm py-2.5","aria-label":`Download ${s}`,children:[e.jsx(u,{size:16,"aria-hidden":"true"})," Download"]})]},s))}),e.jsx("p",{className:"text-center text-gray-400 text-xs mt-8",children:"Documents open in a new tab. Requires a PDF reader such as Adobe Acrobat or your browser's built-in viewer."})]})}),e.jsx("section",{className:"py-16 bg-gray-50",children:e.jsxs("div",{ref:i,className:"reveal max-w-3xl mx-auto px-4 sm:px-6 lg:px-8",children:[e.jsxs("div",{className:"text-center mb-10",children:[e.jsx("span",{className:"badge-blue mb-4 inline-flex",children:"Pro Tips"}),e.jsx("h2",{className:"section-heading mb-4",children:"Get the Best Results"}),e.jsx("p",{className:"section-subheading",children:"Follow these expert tips to accelerate your child's progress."})]}),e.jsx("div",{className:"grid sm:grid-cols-2 gap-4",children:y.map((a,s)=>e.jsxs("div",{className:"flex items-start gap-3 bg-white rounded-xl p-4 border border-gray-100",children:[e.jsx(p,{size:16,className:"text-green-500 mt-0.5 flex-shrink-0","aria-hidden":"true"}),e.jsx("p",{className:"text-gray-700 text-sm leading-relaxed",children:a})]},s))})]})}),e.jsx("section",{className:"py-16 bg-white",children:e.jsxs("div",{ref:l,className:"reveal max-w-3xl mx-auto px-4 sm:px-6 text-center",children:[e.jsx("h2",{className:"section-heading mb-4",children:"Need More Help?"}),e.jsx("p",{className:"section-subheading mb-8",children:"Our support team responds within 24–48 hours."}),e.jsxs("div",{className:"flex flex-wrap justify-center gap-4",children:[e.jsxs(n,{to:"/contact",className:"btn-primary",children:["Contact Support ",e.jsx(g,{size:18,"aria-hidden":"true"})]}),e.jsx(n,{to:"/support",className:"btn-secondary",children:"Browse FAQ"})]})]})})]})]})}export{k as default};
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2563EB" />
+
+    <!-- Primary SEO -->
+    <title>ZENVETIX | Wireless Bedwetting Alarm Support &amp; Setup Guide</title>
+    <meta name="description" content="Official ZENVETIX support site. Setup guides, troubleshooting resources, downloads, and customer support for the ZENVETIX Wireless Bedwetting Alarm. Helping families build confidence, one dry night at a time." />
+    <meta name="keywords" content="ZENVETIX, bedwetting alarm, wireless bedwetting alarm, bedwetting solution, enuresis alarm, child bedwetting, dry nights, bedwetting support, alarm setup guide" />
+    <meta name="author" content="ZENVETIX" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.zenvetix.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.zenvetix.com/" />
+    <meta property="og:title" content="ZENVETIX | Wireless Bedwetting Alarm — Family Support &amp; Setup" />
+    <meta property="og:description" content="Official ZENVETIX support site. Setup guides, troubleshooting, downloads, and expert support for the ZENVETIX Wireless Bedwetting Alarm." />
+    <meta property="og:image" content="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=1200" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="ZENVETIX" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ZENVETIX | Wireless Bedwetting Alarm Support" />
+    <meta name="twitter:description" content="Official ZENVETIX support site. Setup guides, troubleshooting, and downloads for the ZENVETIX Wireless Bedwetting Alarm." />
+    <meta name="twitter:image" content="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=1200" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "ZENVETIX",
+          "url": "https://www.zenvetix.com",
+          "description": "ZENVETIX provides wireless bedwetting alarms and family support resources to help children achieve dry nights.",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "support@zenvetix.com",
+            "contactType": "customer support",
+            "areaServed": "US",
+            "availableLanguage": "English"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "name": "ZENVETIX",
+          "url": "https://www.zenvetix.com",
+          "description": "Official support site for ZENVETIX wireless bedwetting alarms.",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.zenvetix.com/support?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Performance: preconnect and preload -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.pexels.com" />
+    <link rel="preload" as="image" href="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=1200" fetchpriority="high" />
+    <script type="module" crossorigin src="/assets/index-COMvR7lO.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-Dzuxdzeo.js">
+    <link rel="modulepreload" crossorigin href="/assets/router-Dq6QbH-D.js">
+    <link rel="modulepreload" crossorigin href="/assets/lucide-CB4t4vAS.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-CaYThgOc.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

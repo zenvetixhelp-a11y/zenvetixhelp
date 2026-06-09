@@ -1,92 +1,278 @@
+import { useState, useId, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { Mail, Clock, CheckCircle, AlertCircle, Send } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
-const sections = [
-  {
-    title: '1. Information We Collect',
-    body: 'When you submit a support request through our Contact page, we collect your name, email address, optional Amazon order number, and the content of your message. We do not collect payment information, browsing history beyond standard web server logs, or any information from children under 13.',
-  },
-  {
-    title: '2. How We Use Your Information',
-    body: 'We use the information you provide solely to respond to your support request, diagnose product issues, and improve our products and support materials. We do not use your information for marketing without explicit consent.',
-  },
-  {
-    title: '3. Data Storage',
-    body: 'Support messages are stored securely using Supabase, a cloud database provider with industry-standard encryption at rest and in transit (TLS 1.2+). Data is stored in the United States.',
-  },
-  {
-    title: '4. Data Sharing',
-    body: 'We do not sell, rent, or trade your personal information to third parties. We may share information with service providers necessary to operate our website (e.g., hosting, database). These providers are contractually bound to protect your data.',
-  },
-  {
-    title: '5. Data Retention',
-    body: 'Support messages are retained for up to 2 years to provide consistent service history. You may request deletion of your data at any time by emailing support@zenvetix.com.',
-  },
-  {
-    title: '6. Cookies',
-    body: 'This website uses only essential cookies required for the site to function. We do not use tracking cookies, advertising cookies, or third-party analytics cookies.',
-  },
-  {
-    title: '7. Children\'s Privacy',
-    body: 'Our website is intended for parents and guardians. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected such information, please contact us immediately.',
-  },
-  {
-    title: '8. Your Rights',
-    body: 'You have the right to access, correct, or delete personal information we hold about you. To exercise these rights, email support@zenvetix.com. We will respond within 30 days.',
-  },
-  {
-    title: '9. Security',
-    body: 'We implement reasonable administrative, technical, and physical safeguards to protect your information. However, no transmission over the internet is 100% secure, and we cannot guarantee absolute security.',
-  },
-  {
-    title: '10. Changes to This Policy',
-    body: 'We may update this Privacy Policy from time to time. The "Last Updated" date at the top of this page will reflect any changes. Continued use of the site after changes constitutes acceptance.',
-  },
-  {
-    title: '11. Contact Us',
-    body: 'If you have questions about this Privacy Policy, email us at support@zenvetix.com or use the Contact page.',
-  },
-];
+interface FormData {
+  name: string;
+  email: string;
+  orderNumber: string;
+  message: string;
+}
 
-export default function PrivacyPolicyPage() {
+interface FormErrors {
+  name?: string;
+  email?: string;
+  message?: string;
+}
+
+export default function ContactSupportPage() {
+  const uid = useId();
+  const nameId = `${uid}-name`;
+  const emailId = `${uid}-email`;
+  const orderNumberId = `${uid}-order`;
+  const messageId = `${uid}-message`;
+  const nameErrId = `${uid}-name-err`;
+  const emailErrId = `${uid}-email-err`;
+  const messageErrId = `${uid}-message-err`;
+
+  const [form, setForm] = useState<FormData>({ name: '', email: '', orderNumber: '', message: '' });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [submitted, setSubmitted] = useState(false);
+  const formReveal = useScrollReveal();
+
+  const validate = (): FormErrors => {
+    const e: FormErrors = {};
+    if (!form.name.trim()) e.name = 'Name is required.';
+    if (!form.email.trim()) {
+      e.email = 'Email is required.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      e.email = 'Please enter a valid email address.';
+    }
+    if (!form.message.trim()) {
+      e.message = 'Message is required.';
+    } else if (form.message.trim().length < 10) {
+      e.message = 'Message must be at least 10 characters.';
+    }
+    return e;
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const errs = validate();
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) {
+      const firstErrId = errs.name ? nameId : errs.email ? emailId : messageId;
+      (document.getElementById(firstErrId) as HTMLElement | null)?.focus();
+      return;
+    }
+
+    const orderLine = form.orderNumber.trim()
+      ? `Amazon Order Number: ${form.orderNumber.trim()}\n`
+      : '';
+    const body = [
+      `Name: ${form.name.trim()}`,
+      `Email: ${form.email.trim()}`,
+      orderLine,
+      `Message:\n${form.message.trim()}`,
+    ]
+      .filter(Boolean)
+      .join('\n');
+
+    const subject = encodeURIComponent('ZENVETIX Support Request');
+    const encodedBody = encodeURIComponent(body);
+    window.location.href = `mailto:support@zenvetix.com?subject=${subject}&body=${encodedBody}`;
+    setSubmitted(true);
+  };
+
+  const update = (field: keyof FormData, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+    if (errors[field as keyof FormErrors]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+  };
+
   return (
     <>
       <SEOHead
-        title="Privacy Policy — ZENVETIX"
-        description="ZENVETIX Privacy Policy. Learn how we collect, use, and protect your personal information."
-        canonical="/privacy"
-        noIndex={false}
+        title="Contact Support — ZENVETIX"
+        description="Get help from the ZENVETIX support team. We respond to all inquiries within 24–48 hours. Email us at support@zenvetix.com."
+        canonical="/contact"
       />
       <main id="main-content" className="pt-20">
-        <section className="bg-gradient-to-b from-blue-50 to-white py-14 md:py-20">
+        <section className="bg-gradient-to-b from-blue-50 to-white py-16 md:py-24">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-            <span className="badge-blue mb-4 inline-flex">Legal</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Privacy Policy</h1>
-            <p className="text-gray-500 text-sm">Last Updated: June 1, 2026</p>
+            <span className="badge-blue mb-5 inline-flex">Get Help</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5">Contact Support</h1>
+            <p className="text-lg text-gray-500">
+              Have a question about your ZENVETIX alarm? Our team responds within 24–48 hours.
+            </p>
           </div>
         </section>
 
         <section className="py-12 md:py-16 bg-white">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-blue-50 rounded-2xl p-5 mb-10">
-              <p className="text-gray-700 text-sm leading-relaxed">
-                ZENVETIX ("we," "our," or "us") is committed to protecting your privacy. This policy describes what information we collect when you use zenvetix.com ("the Site") and how we use it.
-              </p>
-            </div>
-
-            <div className="space-y-8">
-              {sections.map(({ title, body }) => (
-                <div key={title}>
-                  <h2 className="text-lg font-bold text-gray-900 mb-3">{title}</h2>
-                  <p className="text-gray-600 text-sm leading-relaxed">{body}</p>
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-5 gap-12">
+              {/* Info sidebar */}
+              <div className="lg:col-span-2 space-y-6">
+                <div className="card p-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Mail size={18} className="text-blue-600" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900 text-sm">Email Us Directly</p>
+                      <a href="mailto:support@zenvetix.com" className="text-blue-600 text-sm hover:underline">
+                        support@zenvetix.com
+                      </a>
+                    </div>
+                  </div>
                 </div>
-              ))}
-            </div>
+                <div className="card p-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Clock size={18} className="text-green-600" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900 text-sm">Response Time</p>
+                      <p className="text-gray-500 text-sm">Within 24–48 hours</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-blue-50 rounded-2xl p-5">
+                  <p className="font-semibold text-gray-900 text-sm mb-2">Before contacting us, check:</p>
+                  <ul className="space-y-2">
+                    {[
+                      { label: 'Setup Guide', to: '/setup' },
+                      { label: 'Support Center FAQ', to: '/support' },
+                      { label: 'Downloads page', to: '/downloads' },
+                    ].map(({ label, to }) => (
+                      <li key={to} className="flex items-center gap-2 text-sm text-gray-600">
+                        <CheckCircle size={13} className="text-blue-500 flex-shrink-0" aria-hidden="true" />
+                        <Link to={to} className="hover:text-blue-600 transition-colors">{label}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
 
-            <div className="mt-12 pt-8 border-t border-gray-100 flex flex-wrap gap-4 text-sm text-gray-500">
-              <Link to="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>
-              <Link to="/contact" className="text-blue-600 hover:underline">Contact Us</Link>
-              <Link to="/" className="text-blue-600 hover:underline">Home</Link>
+              {/* Form */}
+              <div className="lg:col-span-3">
+                {submitted ? (
+                  <div className="card p-8 text-center" role="status" aria-live="polite">
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle size={28} className="text-green-600" aria-hidden="true" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Email Client Opened</h2>
+                    <p className="text-gray-500 mb-2">
+                      Your default email app should have opened with your message pre-filled. Send it to complete your support request.
+                    </p>
+                    <p className="text-gray-400 text-sm mb-6">
+                      Didn't open?{' '}
+                      <a href="mailto:support@zenvetix.com" className="text-blue-600 hover:underline">
+                        Email us directly
+                      </a>
+                    </p>
+                    <button
+                      onClick={() => { setForm({ name: '', email: '', orderNumber: '', message: '' }); setSubmitted(false); }}
+                      className="btn-secondary text-sm"
+                    >
+                      Start Over
+                    </button>
+                  </div>
+                ) : (
+                  <div ref={formReveal as React.RefObject<HTMLDivElement>} className="reveal card p-8">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
+                    <form onSubmit={handleSubmit} noValidate className="space-y-5">
+                      <div>
+                        <label htmlFor={nameId} className="form-label">
+                          Full Name <span className="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input
+                          id={nameId}
+                          type="text"
+                          value={form.name}
+                          onChange={(e) => update('name', e.target.value)}
+                          className={`form-input ${errors.name ? 'form-input-error' : ''}`}
+                          placeholder="Jane Smith"
+                          aria-required="true"
+                          aria-invalid={!!errors.name}
+                          aria-describedby={errors.name ? nameErrId : undefined}
+                          autoComplete="name"
+                        />
+                        {errors.name && (
+                          <p id={nameErrId} role="alert" className="mt-1.5 text-red-600 text-xs flex items-center gap-1">
+                            <AlertCircle size={12} aria-hidden="true" />{errors.name}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label htmlFor={emailId} className="form-label">
+                          Email Address <span className="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <input
+                          id={emailId}
+                          type="email"
+                          value={form.email}
+                          onChange={(e) => update('email', e.target.value)}
+                          className={`form-input ${errors.email ? 'form-input-error' : ''}`}
+                          placeholder="jane@example.com"
+                          aria-required="true"
+                          aria-invalid={!!errors.email}
+                          aria-describedby={errors.email ? emailErrId : undefined}
+                          autoComplete="email"
+                        />
+                        {errors.email && (
+                          <p id={emailErrId} role="alert" className="mt-1.5 text-red-600 text-xs flex items-center gap-1">
+                            <AlertCircle size={12} aria-hidden="true" />{errors.email}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label htmlFor={orderNumberId} className="form-label">
+                          Amazon Order Number <span className="text-gray-400 font-normal">(optional)</span>
+                        </label>
+                        <input
+                          id={orderNumberId}
+                          type="text"
+                          value={form.orderNumber}
+                          onChange={(e) => update('orderNumber', e.target.value)}
+                          className="form-input"
+                          placeholder="e.g. 113-1234567-1234567"
+                          autoComplete="off"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor={messageId} className="form-label">
+                          Message <span className="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <textarea
+                          id={messageId}
+                          rows={5}
+                          value={form.message}
+                          onChange={(e) => update('message', e.target.value)}
+                          className={`form-input resize-none ${errors.message ? 'form-input-error' : ''}`}
+                          placeholder="Describe your issue or question in detail..."
+                          aria-required="true"
+                          aria-invalid={!!errors.message}
+                          aria-describedby={errors.message ? messageErrId : undefined}
+                          maxLength={2000}
+                        />
+                        <div className="flex justify-between items-center mt-1">
+                          {errors.message ? (
+                            <p id={messageErrId} role="alert" className="text-red-600 text-xs flex items-center gap-1">
+                              <AlertCircle size={12} aria-hidden="true" />{errors.message}
+                            </p>
+                          ) : <span />}
+                          <span className="text-gray-400 text-xs ml-auto">{form.message.length}/2000</span>
+                        </div>
+                      </div>
+
+                      <button type="submit" className="btn-primary w-full justify-center">
+                        <Send size={17} aria-hidden="true" /> Open Email Client
+                      </button>
+                      <p className="text-gray-400 text-xs text-center">
+                        Clicking the button will open your email app with your message pre-filled. By submitting, you agree to our{' '}
+                        <Link to="/privacy" className="underline hover:text-gray-600">Privacy Policy</Link>.
+                      </p>
+                    </form>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </section>

@@ -1,40 +1,45 @@
-import { useEffect } from 'react';
-
-interface Props {
-  title: string;
-  description: string;
-  canonical?: string;
-  ogImage?: string;
-  noIndex?: boolean;
-}
-
-const IMG = 'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=1200';
-const BASE = 'https://www.zenvetix.com';
-
-export default function SEOHead({ title, description, canonical, ogImage = IMG, noIndex = false }: Props) {
-  useEffect(() => {
-    document.title = title;
-    const set = (attr: 'name' | 'property', key: string, val: string) => {
-      let el = document.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
-      if (!el) { el = document.createElement('meta'); el.setAttribute(attr, key); document.head.appendChild(el); }
-      el.content = val;
-    };
-    const url = canonical ? `${BASE}${canonical}` : BASE;
-    let canon = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-    if (!canon) { canon = document.createElement('link'); canon.rel = 'canonical'; document.head.appendChild(canon); }
-    canon.href = url;
-    set('name', 'description', description);
-    set('name', 'robots', noIndex ? 'noindex,nofollow' : 'index,follow');
-    set('property', 'og:title', title);
-    set('property', 'og:description', description);
-    set('property', 'og:url', url);
-    set('property', 'og:image', ogImage);
-    set('property', 'og:type', 'website');
-    set('property', 'og:site_name', 'ZENVETIX');
-    set('name', 'twitter:card', 'summary_large_image');
-    set('name', 'twitter:title', title);
-    set('name', 'twitter:description', description);
-    set('name', 'twitter:image', ogImage);
-  }, [title, description, canonical, ogImage, noIndex]);
-  return null;
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.zenvetix.com/</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.zenvetix.com/setup</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.zenvetix.com/support</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.zenvetix.com/downloads</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.zenvetix.com/contact</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.zenvetix.com/privacy</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.zenvetix.com/terms</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>
