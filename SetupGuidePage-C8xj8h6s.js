@@ -70,9 +70,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://images.pexels.com" />
     <link rel="preload" as="image" href="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=1200" fetchpriority="high" />
+    <script type="module" crossorigin src="/assets/index-COMvR7lO.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-Dzuxdzeo.js">
+    <link rel="modulepreload" crossorigin href="/assets/router-Dq6QbH-D.js">
+    <link rel="modulepreload" crossorigin href="/assets/lucide-CB4t4vAS.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-CaYThgOc.css">
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,181 +1,203 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle, Clock, Package, Download, ArrowRight, AlertCircle } from 'lucide-react';
+import { Search, X, ChevronDown, ThumbsUp, ArrowRight } from 'lucide-react';
 import SEOHead from '../components/SEOHead';
-import { useScrollReveal, useStaggerReveal } from '../hooks/useScrollReveal';
-
-const SETUP_IMG = 'https://images.pexels.com/photos/6266977/pexels-photo-6266977.jpeg?auto=compress&cs=tinysrgb&w=800';
-const SENSOR_IMG = 'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=600';
-
-const steps = [
-  {
-    icon: Package,
-    title: 'Unbox Your ZENVETIX Alarm',
-    desc: "You should have: 1 moisture sensor, 1 alarm receiver, 1 USB charging cable, and a quick-start card.",
-    tips: ['Charge the alarm for 2 hours before first use.', 'Keep the sensor away from water when charging.'],
-  },
-  {
-    icon: CheckCircle,
-    title: 'Attach the Moisture Sensor',
-    desc: "Clip the sensor to the inside of your child's underwear, positioned near the hip area — not at the crotch seam.",
-    tips: ['Make sure the metal contacts face the skin.', 'Clip firmly but not too tight.'],
-  },
-  {
-    icon: AlertCircle,
-    title: 'Attach the Alarm Receiver',
-    desc: "Snap the receiver clip onto the shoulder of your child's pajama top. The speaker should face outward.",
-    tips: ['For deep sleepers, start at the highest volume.', 'The shoulder position ensures the alarm is heard clearly.'],
-  },
-  {
-    icon: Clock,
-    title: 'Test Before Bedtime',
-    desc: 'Press and hold the test button on the receiver for 2 seconds. The alarm should sound immediately.',
-    tips: ['Re-test every few nights to confirm proper contact.', 'Wet the sensor slightly with a damp finger to simulate activation.'],
-  },
-];
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const faqs = [
-  { q: 'How long until the alarm wakes my child?', a: 'The alarm triggers within seconds of the first drop of moisture. Most children begin responding within 1–3 weeks of consistent nightly use.' },
-  { q: 'What if my child sleeps through the alarm?', a: 'Go wake your child manually, guide them to the bathroom, and help them turn off the alarm. Do not turn it off for them — they need to make the association.' },
-  { q: 'How do I wash the sensor?', a: 'Wipe the sensor with a damp cloth. Do not submerge in water or machine wash. Allow it to air dry completely before each night of use.' },
+  {
+    id: 'q1', cat: 'Setup',
+    question: 'How do I attach the sensor correctly?',
+    answer: "Clip the moisture sensor to the inside waistband of your child's underwear, near the hip. The two metal contact pads must face inward toward the skin. Avoid placing it at the crotch seam — the hip position detects moisture just as quickly and is more comfortable. Make sure the clip is secure but not pinching.",
+  },
+  {
+    id: 'q2', cat: 'Setup',
+    question: 'Do I need to charge the alarm before first use?',
+    answer: 'Yes. Charge the alarm receiver for at least 2 hours before the first use using the included USB cable. A full charge lasts approximately 7–10 nights of use. A low battery indicator light will flash red when charging is needed. Never use the alarm while charging.',
+  },
+  {
+    id: 'q3', cat: 'Troubleshooting',
+    question: 'The alarm is not sounding when the sensor gets wet. What should I do?',
+    answer: "First, check that the sensor is firmly clipped and the metal contact pads are touching skin. Then press the test button on the receiver — if it beeps, the receiver is working. If the alarm doesn't trigger during a wetting event, the sensor may be mispositioned or the connection may be loose. Try re-clipping the sensor closer to the hip. If the issue persists, contact us at support@zenvetix.com.",
+  },
+  {
+    id: 'q4', cat: 'Troubleshooting',
+    question: 'My child sleeps through the alarm. What can I do?',
+    answer: "This is the most common issue and is normal at first. Make sure the alarm is set to its highest volume level. You may need to go into your child's room to assist in waking them for the first several weeks. Over time (typically 4–8 weeks), most children begin waking on their own. Never silence the alarm yourself without waking your child first.",
+  },
+  {
+    id: 'q5', cat: 'Troubleshooting',
+    question: 'The alarm keeps going off without any wetting. Why?',
+    answer: "False alarms are usually caused by sweat or condensation on the sensor. Make sure the sensor is clipped to the hip area and that the metal contacts are clean and dry before bedtime. Wipe the sensor contacts with a dry cloth before each use. If false alarms continue, the sensor may need to be replaced — contact support.",
+  },
+  {
+    id: 'q6', cat: 'Using the Alarm',
+    question: 'How long will it take to see results?',
+    answer: 'Most children show significant improvement within 4–8 weeks of consistent nightly use. Bedwetting alarm therapy has a 70–80% success rate — the highest of any bedwetting treatment. Consistency is critical: use the alarm every single night without skipping.',
+  },
+  {
+    id: 'q7', cat: 'Using the Alarm',
+    question: 'What volume setting should I use?',
+    answer: "Start with the highest volume level, especially for deep sleepers. If your child is consistently waking on their own after 2–3 weeks, you can lower the volume. The goal is for the alarm to be loud enough to rouse your child from deep sleep — always prioritize waking effectiveness.",
+  },
+  {
+    id: 'q8', cat: 'Maintenance',
+    question: 'How do I clean the sensor?',
+    answer: 'Wipe the sensor and its metal contact pads with a slightly damp cloth after each use. Do not submerge the sensor in water or place it in the washing machine — it is not waterproof. Allow it to air dry completely before storing.',
+  },
+  {
+    id: 'q9', cat: 'Warranty',
+    question: 'What is covered under warranty?',
+    answer: 'ZENVETIX offers a 30-day satisfaction guarantee and a 90-day limited warranty against manufacturing defects. If your alarm stops working due to a defect within 90 days of purchase, contact us at support@zenvetix.com with your Amazon order number. We will send a replacement at no charge. Damage from misuse or water immersion is not covered.',
+  },
 ];
 
-export default function SetupGuidePage() {
-  const [activeVideo, setActiveVideo] = useState(false);
-  const stepsRef = useRef<HTMLDivElement>(null);
-  const faqReveal = useScrollReveal();
-  const ctaReveal = useScrollReveal();
-  useStaggerReveal(stepsRef as React.RefObject<HTMLElement>, '.setup-step', 120);
+const categories = ['All', 'Setup', 'Troubleshooting', 'Using the Alarm', 'Maintenance', 'Warranty'];
+
+export default function SupportCenterPage() {
+  const [query, setQuery] = useState('');
+  const [cat, setCat] = useState('All');
+  const [open, setOpen] = useState<string | null>(null);
+  const headingReveal = useScrollReveal();
+
+  const filtered = faqs.filter((f) => {
+    const matchCat = cat === 'All' || f.cat === cat;
+    const q = query.toLowerCase();
+    const matchQuery = !q || f.question.toLowerCase().includes(q) || f.answer.toLowerCase().includes(q);
+    return matchCat && matchQuery;
+  });
+
+  const counts = Object.fromEntries(
+    categories.map((c) => [c, c === 'All' ? faqs.length : faqs.filter((f) => f.cat === c).length])
+  );
 
   return (
     <>
       <SEOHead
-        title="Setup Guide — ZENVETIX Bedwetting Alarm"
-        description="Step-by-step instructions to set up your ZENVETIX wireless bedwetting alarm. Follow our easy 4-step guide and get your child started on dry nights tonight."
-        canonical="/setup"
-        ogImage={SETUP_IMG}
+        title="Support Center & FAQ — ZENVETIX"
+        description="Find answers to common ZENVETIX bedwetting alarm questions. Setup help, troubleshooting, maintenance guides, and warranty information."
+        canonical="/support"
       />
       <main id="main-content" className="pt-20">
-        {/* Hero */}
         <section className="bg-gradient-to-b from-blue-50 to-white py-16 md:py-24">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-            <span className="badge-blue mb-5 inline-flex">Step-by-Step Guide</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5 leading-tight">
-              Set Up Your ZENVETIX Alarm
-            </h1>
-            <p className="text-lg text-gray-500 leading-relaxed mb-8">
-              Most families complete setup in under 10 minutes. Follow these steps in order and your child will be ready for their first night tonight.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
-              <span className="flex items-center gap-1.5"><Clock size={14} className="text-blue-500" aria-hidden="true" /> Takes ~10 minutes</span>
-              <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-green-500" aria-hidden="true" /> No tools needed</span>
-              <span className="flex items-center gap-1.5"><Package size={14} className="text-blue-500" aria-hidden="true" /> Everything included</span>
-            </div>
-          </div>
-        </section>
-
-        {/* QR banner */}
-        <div className="bg-blue-600 py-3 px-4" role="banner">
-          <p className="text-white text-sm text-center font-medium">
-            Just received your ZENVETIX alarm? You're in the right place. Follow the steps below to get started tonight.
-          </p>
-        </div>
-
-        {/* Steps */}
-        <section className="py-16 md:py-24 bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div ref={stepsRef} className="space-y-10">
-              {steps.map(({ icon: Icon, title, desc, tips }, i) => (
-                <div key={i} className="setup-step reveal">
-                  <div className="flex gap-6 items-start">
-                    <div className="flex-shrink-0 w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center font-bold text-lg shadow-sm">
-                      {i + 1}
-                    </div>
-                    <div className="flex-1 pt-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Icon size={17} className="text-blue-500" aria-hidden="true" />
-                        <h2 className="text-xl font-bold text-gray-900">{title}</h2>
-                      </div>
-                      <p className="text-gray-600 leading-relaxed mb-4">{desc}</p>
-                      <ul className="space-y-2">
-                        {tips.map((tip, j) => (
-                          <li key={j} className="flex items-start gap-2 text-sm text-gray-500">
-                            <CheckCircle size={14} className="text-green-500 mt-0.5 flex-shrink-0" aria-hidden="true" />
-                            {tip}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                  {i < steps.length - 1 && <div className="ml-6 mt-6 w-px h-6 bg-gray-200" aria-hidden="true"></div>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Video */}
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="reveal">
-              <span className="badge-blue mb-4 inline-flex">Video Walkthrough</span>
-              <h2 className="section-heading mb-4">Watch the Full Setup Video</h2>
-              <p className="section-subheading mb-8">Prefer watching? Our setup video covers every step in detail.</p>
-            </div>
-            <div
-              className="reveal relative rounded-2xl overflow-hidden bg-gray-900 aspect-video cursor-pointer group"
-              role="button"
-              tabIndex={0}
-              aria-label="Play ZENVETIX setup video"
-              onClick={() => setActiveVideo(true)}
-              onKeyDown={(e) => e.key === 'Enter' && setActiveVideo(true)}
-            >
-              <img
-                src={SENSOR_IMG}
-                alt="Setup video thumbnail"
-                className="w-full h-full object-cover opacity-60 group-hover:opacity-70 transition-opacity"
-                loading="lazy"
+          <div ref={headingReveal as React.RefObject<HTMLDivElement>} className="reveal max-w-3xl mx-auto px-4 sm:px-6 text-center">
+            <span className="badge-blue mb-5 inline-flex">Support Center</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5">How Can We Help?</h1>
+            <p className="text-lg text-gray-500 mb-8">Search our FAQ or browse by category below.</p>
+            <div className="relative max-w-xl mx-auto">
+              <Search size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" aria-hidden="true" />
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search questions..."
+                className="form-input pl-11 pr-10 text-base"
+                aria-label="Search frequently asked questions"
               />
-              {!activeVideo ? (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
-                    <div className="w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[18px] border-l-blue-600 ml-1" aria-hidden="true"></div>
-                  </div>
-                </div>
-              ) : (
-                <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
-                  <p className="text-white text-sm">Video coming soon</p>
-                </div>
+              {query && (
+                <button
+                  onClick={() => setQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+                  aria-label="Clear search"
+                >
+                  <X size={16} aria-hidden="true" />
+                </button>
               )}
             </div>
           </div>
         </section>
 
-        {/* FAQs */}
-        <section className="py-16 bg-white">
-          <div ref={faqReveal as React.RefObject<HTMLDivElement>} className="reveal max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="section-heading mb-2 text-center">Setup FAQs</h2>
-            <p className="section-subheading text-center mb-10">Common questions from first-time users.</p>
-            <div className="space-y-4">
-              {faqs.map(({ q, a }) => (
-                <div key={q} className="card p-6">
-                  <h3 className="font-bold text-gray-900 mb-2">{q}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">{a}</p>
-                </div>
+        {/* Category filters */}
+        <div className="sticky top-16 z-30 bg-white border-b border-gray-100 py-3 shadow-sm">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 overflow-x-auto">
+            <div className="flex gap-2 min-w-max" role="group" aria-label="Filter by category">
+              {categories.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setCat(c)}
+                  aria-pressed={cat === c}
+                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-150 flex items-center gap-1.5 min-h-[36px] ${
+                    cat === c ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {c}
+                  <span className={`text-xs rounded-full px-1.5 py-0.5 ${cat === c ? 'bg-blue-500' : 'bg-gray-200 text-gray-500'}`}>
+                    {counts[c]}
+                  </span>
+                </button>
               ))}
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* CTA */}
-        <section className="py-16 bg-blue-50">
-          <div ref={ctaReveal as React.RefObject<HTMLDivElement>} className="reveal max-w-3xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="section-heading mb-4">Still Have Questions?</h2>
-            <p className="section-subheading mb-8">Our support team is ready to help — usually within 24 hours.</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/contact" className="btn-primary">Contact Support <ArrowRight size={18} aria-hidden="true" /></Link>
-              <Link to="/downloads" className="btn-secondary">
-                <Download size={18} aria-hidden="true" /> Download Manual
+        {/* FAQ list */}
+        <section className="py-12 md:py-16 bg-white">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6">
+            {filtered.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="text-gray-500 mb-4">No results for "{query}".</p>
+                <button onClick={() => { setQuery(''); setCat('All'); }} className="btn-secondary text-sm">
+                  Clear filters
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {filtered.map(({ id, question, answer, cat: itemCat }) => {
+                  const isOpen = open === id;
+                  const contentId = `faq-answer-${id}`;
+                  const triggerId = `faq-trigger-${id}`;
+                  return (
+                    <div key={id} className="card overflow-hidden">
+                      <button
+                        id={triggerId}
+                        onClick={() => setOpen(isOpen ? null : id)}
+                        className="w-full flex items-center justify-between px-6 py-5 text-left gap-4 hover:bg-gray-50 transition-colors min-h-[60px]"
+                        aria-expanded={isOpen}
+                        aria-controls={contentId}
+                      >
+                        <div className="flex items-start gap-3">
+                          <span className="text-xs text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded-full whitespace-nowrap mt-0.5 flex-shrink-0">
+                            {itemCat}
+                          </span>
+                          <span className="font-semibold text-gray-900 text-sm leading-snug">{question}</span>
+                        </div>
+                        <ChevronDown
+                          size={18}
+                          className={`text-gray-400 flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      <div
+                        id={contentId}
+                        role="region"
+                        aria-labelledby={triggerId}
+                        className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96' : 'max-h-0'}`}
+                      >
+                        <div className="px-6 pb-5 pt-1 border-t border-gray-100">
+                          <p className="text-gray-600 text-sm leading-relaxed">{answer}</p>
+                          <div className="mt-4 flex items-center gap-3">
+                            <span className="text-xs text-gray-400">Was this helpful?</span>
+                            <Link
+                              to="/contact"
+                              className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium"
+                            >
+                              <ThumbsUp size={12} aria-hidden="true" /> Still need help? Contact us
+                              <ArrowRight size={11} aria-hidden="true" />
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <div className="mt-12 bg-blue-50 rounded-2xl p-8 text-center">
+              <h2 className="font-bold text-gray-900 text-xl mb-2">Didn't Find Your Answer?</h2>
+              <p className="text-gray-500 text-sm mb-6">Send us a message and we'll respond within 24–48 hours.</p>
+              <Link to="/contact" className="btn-primary">
+                Contact Support <ArrowRight size={18} aria-hidden="true" />
               </Link>
             </div>
           </div>
